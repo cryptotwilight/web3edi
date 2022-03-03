@@ -1,0 +1,10 @@
+[ 
+  instructor:{
+	name: "James Holden", 
+	email: "holden@theExpanse.com"
+	photo : "https://images.pexels.com/photos/8415157/pexels-photo-8415157.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"},
+  instructor:{
+	name : "Anaya Holden", 
+	email: "anaya@holidayslive.com"
+	photo : "https://images.pexels.com/photos/7761070/pexels-photo-7761070.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"}
+]

@@ -1,0 +1,38 @@
+[
+	question : {
+			query : "what is the size of the world", 
+			response_options : 	[ 
+									{ 1 : "200 cubic meters"}, 
+									{ 2 : "300 cubic meters"},
+									{ 3 : "1,000,000,000,000,000 cubic meters"},
+									{ 4 : "400 cubic meters"}
+								],
+			correct_response : 3,
+			explanation : "the earth is realy really big
+	},
+	question : {
+			query : " the earth is flat true or false ", 
+			response_options : 	[ 
+									{1 : true}, 
+									{2 : false}
+								],
+			correct_response : 1,
+			explanation : "we are flat earthers here"
+	},	
+
+	question : { 
+			query : " which statements are true? 
+			1 - roses are only red, 
+			2 - the sky is actually black, 
+			3 - the sun is hot, 
+			4 - crypto is good ",  
+			response_options : 	[ 
+									{1 : "1, 2 only"},
+									{2 : "2, 3, 4},
+									{3 : "3, 4 only"},
+									{4 : "1, 4 only"} 
+								],
+			correct_response : 2,
+			explanation : " come on didn't you watch the video?"
+	}		
+]
