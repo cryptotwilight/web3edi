@@ -1,38 +1,44 @@
 [
-	question : {
-			query : "what is the size of the world", 
-			response_options : 	[ 
-									{ 1 : "200 cubic meters"}, 
-									{ 2 : "300 cubic meters"},
-									{ 3 : "1,000,000,000,000,000 cubic meters"},
-									{ 4 : "400 cubic meters"}
-								],
-			correct_response : 3,
-			explanation : "the earth is realy really big
-	},
-	question : {
-			query : " the earth is flat true or false ", 
-			response_options : 	[ 
-									{1 : true}, 
-									{2 : false}
-								],
-			correct_response : 1,
-			explanation : "we are flat earthers here"
-	},	
-
-	question : { 
-			query : " which statements are true? 
-			1 - roses are only red, 
-			2 - the sky is actually black, 
-			3 - the sun is hot, 
-			4 - crypto is good ",  
-			response_options : 	[ 
-									{1 : "1, 2 only"},
-									{2 : "2, 3, 4},
-									{3 : "3, 4 only"},
-									{4 : "1, 4 only"} 
-								],
-			correct_response : 2,
-			explanation : " come on didn't you watch the video?"
-	}		
-]
+    {
+      "question": "What is a node in a blockchain network?",
+      "option1": "A programming language",
+      "option2": "A cryptocurrency token",
+      "option3": "A computer running the blockchain software"
+    },
+    {
+      "question": "Where are your cryptocurrency assets stored?",
+      "option1": "In your digital wallet",
+      "option2": "In 1000s of blockchain nodes",
+      "option3": "In your bank account"
+    },
+    {
+      "question": "What is a miner?",
+      "option1": "For block rewards",
+      "option2": "For goodwill",
+      "option3": "For fame"
+    },
+    {
+      "question": "What does P2P mean?",
+      "option1": "Peer to Peer",
+      "option2": "Product to Product",
+      "option3": "Password to Private key"
+    },
+    {
+      "question": "What is the term for when a blockchain splits?",
+      "option1": "Fork",
+      "option2": "Spoon",
+      "option3": "Cup"
+    },
+    {
+      "question": "Who created Bitcoin?",
+      "option1": "Satoshi Nakamoto",
+      "option2": "Craig Wright",
+      "option3": "John McAfee"
+    },
+    {
+      "question": "Who can modify the existing state of a blockchain?",
+      "option1": "Miners",
+      "option2": "Satoshi Nakamoto",
+      "option3": "Nobody"
+    }
+  ]
