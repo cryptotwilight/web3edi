@@ -2,9 +2,11 @@
 
 pragma solidity >=0.8.0 <0.9.0;
 
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/c239e1af8d1a1296577108dd6989a17b57434f8e/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/IAcademyBoxCourse.sol";
 
-contract Course is IAcademyBoxCourse { 
+
+contract Course is IABCourseInstructor { 
 
     address self; 
     string title; 
@@ -12,6 +14,9 @@ contract Course is IAcademyBoxCourse {
     string logo; 
     uint256 passMark; 
     uint256 [] sectionIds;
+    uint256 courseFee; 
+
+    address NATIVE = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
    // DripsToken dripsToken;  
 
@@ -48,7 +53,7 @@ contract Course is IAcademyBoxCourse {
     mapping(address=>bool) coursePaidByStudent; 
 
         
-    constructor( address _instructor, string memory _instructorDetails, address _dripsToken) { 
+    constructor( address _instructor, string memory _instructorDetails, address _dripsToken, address tribes) { 
         self = address(this);
         instructor = _instructor; 
         instructorDetails = _instructorDetails; 
@@ -65,6 +70,10 @@ contract Course is IAcademyBoxCourse {
 
     function getLogo() view external returns (string memory _logo){
         return logo; 
+    }
+
+    function getCourseFee() view external returns (uint256 _fee) {
+        return courseFee; 
     }
 
     function getPassMark() view external returns (uint256 _passMark) {
@@ -87,12 +96,6 @@ contract Course is IAcademyBoxCourse {
         return ("","", "", "", 0);
     }
 
-    function dripInstructor(uint256 _amount) external returns (uint256 _nftId) {
-
-
-
-    }
-
     function purchaseCourseSection(uint256 _sectionId, uint256 _sectionFee, address _erc20) payable external returns(uint256 _sectionPaymentReference){
 
 
@@ -103,13 +106,15 @@ contract Course is IAcademyBoxCourse {
     }                                                                          
 
     function purchaseCourse(uint256 _courseFee, address _erc20) payable external returns (uint256 _coursePaymentReference){
+        _coursePaymentReference = processPurchase(_courseFee, _erc20);
 
+
+        return _coursePaymentReference;
     }
 
     function mintCourseCompletionNFT(address _student) external returns (uint256 _nftId, uint256 _passMark){
 
     }
-
 
     function submitCourseSectionAnswers(address  _student,
                                         uint256 _sectionId,  
@@ -174,8 +179,17 @@ contract Course is IAcademyBoxCourse {
         description = _description; 
         return true; 
     }
+
+    function setCourseFee(uint256 _fee) external returns (bool _set) {
+        courseFee = _fee; 
+    }
             
 //======================================== INTERNAL ======= 
+
+    function getTxRef() internal returns (uint256 _ref) {
+        return block.timestamp; 
+    }
+
 
     function getScore(  uint256 [] memory questionNumber, 
                         uint256[] memory _correctResponse,
@@ -186,5 +200,16 @@ contract Course is IAcademyBoxCourse {
             }
         }
         return _score;
+    }
+
+    function processPurchase(uint256 _amount, address _erc20Address) internal returns (bool _processed){ 
+        if(_erc20Address == NATIVE) {            
+            require(msg.value == _amount, " amount stated not equal to amount sent ");   
+        }
+        else {             
+            IERC20 erc20 = IERC20(_erc20Address);
+            erc20.transferFrom(msg.sender, self, _amount);                                           
+        }    
+
     }
 }
