@@ -3,8 +3,9 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/c239e1af8d1a1296577108dd6989a17b57434f8e/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/IAcademyBoxCourse.sol";
-
+import "../interfaces/IABCourseInstructor.sol";
+import "../interfaces/IAcademyBox.sol";
+import "../interfaces/IABSchool.sol";
 
 contract Course is IABCourseInstructor { 
 
@@ -14,7 +15,12 @@ contract Course is IABCourseInstructor {
     string logo; 
     uint256 passMark; 
     uint256 [] sectionIds;
-    uint256 courseFee; 
+    uint256 courseFee;     
+    uint256 marksPerSection; 
+    string status; 
+
+    IAcademyBox academyBox; 
+    IABSchool school; 
 
     address NATIVE = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
@@ -27,37 +33,45 @@ contract Course is IABCourseInstructor {
         string questionBank;
         uint256 passMark; 
         uint256 fee; 
+        string summary;
     }
 
     struct SectionResult {
         uint256 score; 
         uint256 passMark; 
-        bool  passFail; 
+        bool  passFail;         
     }
 
     struct Purchase { 
         uint256 id; 
         string purchaseType; 
+        uint256 typeId; 
         uint256 amount; 
-
-
     }
 
     address instructor; 
     string instructorDetails; 
     mapping(uint256=>Section) courseSectionById; 
 
-    address students;     
-    mapping(address=>mapping(uint256=>SectionResult)) sectionResultBySectionIdByStudent; 
-    mapping(address=>mapping(uint256=>bool)) sectionPaidByStudent; 
-    mapping(address=>bool) coursePaidByStudent; 
+    address [] students;         
+    mapping(address=>bool) hasPurchaseByStudent; 
+    mapping(uint256=>mapping(address=>bool)) hasPurchasedSectionByStudentBySection;
+    mapping(address=>Purchase[]) purchasesByStudent; 
+    mapping(address=>mapping(uint256=>SectionResult)) sectionResultBySectionIdByStudent;
+    
 
         
-    constructor( address _instructor, string memory _instructorDetails, address _dripsToken, address tribes) { 
+    constructor( address _instructor, string memory _instructorDetails, address _academyBox, address _school) { 
         self = address(this);
         instructor = _instructor; 
-        instructorDetails = _instructorDetails; 
+        instructorDetails = _instructorDetails;         
+        academyBox = IAcademyBox(_academyBox);
+        school = IABSchool(_school);
      //   dripsToken = DripsToken(_dripsToken);
+    }
+
+    function getSchool() view external returns(address _school) {
+        return address(school); 
     }
 
     function getTitle() view external returns (string memory _courseTitle){
@@ -80,16 +94,23 @@ contract Course is IABCourseInstructor {
         return passMark; 
     }
 
+    function getStatus() view external returns (string memory _status) {
+        return status; 
+    }
+
     function getSections() view external returns (uint256 [] memory _sectionIds){
         return sectionIds; 
     }
 
-    function getSection(uint256 _sectionId) view external returns( string memory _sectionTitle, 
-                                                                          string memory _sectionVideo, 
-                                                                          string memory _sectionTextContent,          
-                                                                         string memory _sectionQuestionBank, 
-                                                                         uint256 _passMark){
-        if(coursePaidByStudent[msg.sender] || sectionPaidByStudent[msg.sender][_sectionId]){                                                                        
+    function getSectionSummary(uint256 _sectionId) view external returns (string memory _secionSummary){ 
+        Section memory section_ = courseSectionById[_sectionId];
+        return section_.summary; 
+    }
+
+    function getSection(uint256 _sectionId) view external returns( string memory _sectionTitle, string memory _sectionVideo, string memory _sectionTextContent,          
+                                                                         string memory _sectionQuestionBank, uint256 _passMark) {
+        address student_ = msg.sender; 
+        if(hasPurchaseByStudent[student_] || hasPurchasedSectionByStudentBySection[_sectionId][student_]){                                                                        
             Section memory section_ = courseSectionById[_sectionId];
             return (section_.title, section_.video, section_.textContent, section_.questionBank, section_.passMark);
         }
@@ -97,6 +118,7 @@ contract Course is IABCourseInstructor {
     }
 
     function purchaseCourseSection(uint256 _sectionId, uint256 _sectionFee, address _erc20) payable external returns(uint256 _sectionPaymentReference){
+        
 
 
     }
@@ -106,7 +128,7 @@ contract Course is IABCourseInstructor {
     }                                                                          
 
     function purchaseCourse(uint256 _courseFee, address _erc20) payable external returns (uint256 _coursePaymentReference){
-        _coursePaymentReference = processPurchase(_courseFee, _erc20);
+        _coursePaymentReference = processPurchaseInternal(_courseFee, _erc20);
 
 
         return _coursePaymentReference;
@@ -121,7 +143,7 @@ contract Course is IABCourseInstructor {
                                         uint256 [] memory _questionNumber, 
                                         uint256[] memory _correctResponse,
                                         uint256 [] memory _submittedResponse ) external returns (uint256 _score, bool _passFail) {
-                _score = getScore(_questionNumber, _correctResponse, _submittedResponse);
+                _score = getScoreInternal(_questionNumber, _correctResponse, _submittedResponse);
                 Section memory section_ = courseSectionById[_sectionId];
                 if(_score > section_.passMark) {
                     _passFail = true; 
@@ -139,13 +161,13 @@ contract Course is IABCourseInstructor {
         return (_score, _passFail);
     }
 
-    function addCourseSection(string memory _sectionTitle, 
+    function addCourseSection(  string memory _sectionTitle, 
                                 string memory _sectionVideo, 
                                 string memory _sectionTextContent, 
                                 string memory _sectionQuestionBank,
                                 uint256 _passMark, 
-                                uint256 _fee
-                                ) external returns (uint256 _sectionId) {
+                                uint256 _fee,
+                                string memory _summary) external returns (uint256 _sectionId) {
         _sectionId = sectionIds.length+1;        
         Section memory section_ = Section({
                                             title : _sectionTitle,
@@ -153,7 +175,8 @@ contract Course is IABCourseInstructor {
                                             textContent : _sectionTextContent,                                                
                                             questionBank : _sectionQuestionBank,
                                             passMark : _passMark,
-                                            fee : _fee
+                                            fee : _fee,
+                                            summary : _summary
                                         });
         courseSectionById[_sectionId] = section_; 
         sectionIds.push(_sectionId);
@@ -182,16 +205,33 @@ contract Course is IABCourseInstructor {
 
     function setCourseFee(uint256 _fee) external returns (bool _set) {
         courseFee = _fee; 
+        return true; 
+    }
+
+    function setStatus(string memory _status) external returns (bool _set){
+        status = _status; 
+        return true; 
+    }
+
+    function populateCourse(string memory _title, string memory _logo, string memory _description, uint256 _fee, uint256 _passMark, uint256 _marksPerSection) external returns (bool _populated) {
+        title = _title; 
+        logo = _logo; 
+        description = _description; 
+        courseFee = _fee; 
+        passMark = _passMark; 
+        marksPerSection = _marksPerSection;
+
+        return true; 
     }
             
 //======================================== INTERNAL ======= 
 
-    function getTxRef() internal returns (uint256 _ref) {
+    function getTxRef() view internal returns (uint256 _ref) {
         return block.timestamp; 
     }
 
 
-    function getScore(  uint256 [] memory questionNumber, 
+    function getScoreInternal(  uint256 [] memory questionNumber, 
                         uint256[] memory _correctResponse,
                         uint256 [] memory _submittedResponse ) pure internal returns (uint256 _score) {                            
         for(uint256 x = 0; x < questionNumber.length; x++){
@@ -202,7 +242,7 @@ contract Course is IABCourseInstructor {
         return _score;
     }
 
-    function processPurchase(uint256 _amount, address _erc20Address) internal returns (bool _processed){ 
+    function processPurchaseInternal(uint256 _amount, address _erc20Address) internal returns (uint256 _processed){ 
         if(_erc20Address == NATIVE) {            
             require(msg.value == _amount, " amount stated not equal to amount sent ");   
         }
@@ -210,6 +250,6 @@ contract Course is IABCourseInstructor {
             IERC20 erc20 = IERC20(_erc20Address);
             erc20.transferFrom(msg.sender, self, _amount);                                           
         }    
-
+        return getTxRef(); 
     }
 }

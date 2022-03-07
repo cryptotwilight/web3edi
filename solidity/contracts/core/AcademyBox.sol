@@ -2,20 +2,25 @@
 
 pragma solidity >=0.8.0 <0.9.0;
 
-import "https://github.com/decentology/hyperverse-mono/blob/0f4947dda72c32f78da014b499211aa64e59b572/packages/hyperverse-ethereum-tribes/contracts/Tribes.sol";
+//import "https://github.com/decentology/hyperverse-mono/blob/0f4947dda72c32f78da014b499211aa64e59b572/packages/hyperverse-ethereum-tribes/contracts/Tribes.sol";
 import "./Course.sol";
+import "./School.sol";
 import "./InstructorDashboard.sol";
 import "./StudentDashboard.sol";
-import "../interfaces/IAcademyBoxCourse.sol";
-import "../libraries/LAcademyBoxUtils.sol";
+
+import "../interfaces/IAcademyBox.sol";
+import "../interfaces/IABSchool.sol";
 
 
-contract AcademyBox is IHyperverseModule, IAcademyBox { 
+
+ 
+contract AcademyBox is /*IHyperverseModule,*/ IAcademyBox { 
 
     using LAcademyBoxUtils for address;
+    using LAcademyBoxUtils for IABSchool;
 
     address administrator; 
-    Tribes tribes; 
+ //   Tribes tribes; 
     address self; 
 
     mapping(address=>bool) hasStudentDashboard;
@@ -24,30 +29,27 @@ contract AcademyBox is IHyperverseModule, IAcademyBox {
     mapping(address=>address) dashboardByStudent; 
     mapping(uint256=>address[]) studentBySchool; 
 
-    struct School { 
-        uint256 schoolId; 
-        string name; 
-        string description; 
-        address instructor; 
-    }
-
     struct Instructor { 
         string _summary; 
         uint256 [] _schoolIds;
         string [] _schoolNames;
     }
 
-    School [] schools; 
-    mapping(address=>School[]) schoolsByInstructor;
-    mapping(uint256=>School) schoolById; 
+    IABSchool [] schools; 
+    address [] schoolAddresses; 
+
+    uint256 schoolCounter; 
+
+    mapping(address=>IABSchool) schoolsByInstructor;
+    mapping(uint256=>IABSchool) schoolById; 
+    mapping(address=>string) summaryByInstructor; 
 
     address [] activeCourses; 
     address [] retiredCourses; 
 
-
     constructor(address _administrator, address _tribesDeployment) {
         administrator = _administrator; 
-        tribes = Tribes(_tribesDeployment);
+       // tribes = Tribes(_tribesDeployment);
         self = address(this);
     }
 
@@ -55,78 +57,84 @@ contract AcademyBox is IHyperverseModule, IAcademyBox {
         return activeCourses; 
     }
 
-    function getSchools() view external returns(uint256 [] memory _schoolIds, string [] memory _names, string [] memory _descriptions, address [] memory _instructors) {
-        _schoolIds = new uint256[](schools.length);
-        _names = new string[](schools.length);
-        _descriptions = new string[](schools.length);
-        _instructors = new address[](schools.length);
-
-        for(uint256 x = 0; x < schools.length; x++) {
-            School memory school = schools[x];
-            _schoolIds[x] = school.schoolId; 
-            _names[x] = school.name; 
-            _descriptions[x] = school.description; 
-            _instructors[x] = school.instructor; 
-        }
-        return (_schoolIds, _names, _descriptions, _instructors);
-    }    
-
-    function getSchools(uint256 [] memory _schoolIds) view external returns (uint256 [] memory _schoolIds, string [] memory _names, string [] memory _descriptions, address [] memory _instructors){
-
+    function getSchools() view external returns (address [] memory _schools){
+        return schoolAddresses; 
     }
 
-    function getInstructor(address _instructor) view external returns (string memory _summary, uint256 [] memory _schoolIds){
-
+    function getInstructor(address _instructor) view external returns (string memory _summary, address _school){
+        _summary = summaryByInstructor[_instructor];
+        return (_summary, address(schoolsByInstructor[_instructor]));
     }
 
+    function openSchool(address _school) external returns (bool _schoolOpen){
+        schools.push(IABSchool(_school));
+        schoolAddresses.push(_school);
+        return true; 
+    }
+
+    function closeSchool(address _school) external returns (bool _schoolClosed) {
+        schools = IABSchool(_school).remove(schools);
+        schoolAddresses = _school.remove(schoolAddresses);
+        return true; 
+    }
 
     function postCourse(address _course) external returns(bool _posted) {
         activeCourses.push(_course);
-        return _posted; 
+        return true;   
     }
 
     function retireCourse(address _course) external returns (bool _retired) {
         retiredCourses.push(_course);
         activeCourses = _course.remove(activeCourses);
+        return true; 
     }
 
-    function joinSchool(uint256 _schoolId, address _student, uint256 _dripAmount, address _charity, uint256 _split)  external returns (uint256 _schoolBadge) {
-            // setup drip
-            tribes.joinTribe(self, _schoolId); 
-            studentBySchool[_schoolId].push(_student); 
-            _schoolBadge = mintBadgeInternal(_student, _schoolId);
-            return _schoolBadge; 
-    }
 
-    function leaveSchool(address _student) external returns (uint256 _schoolBadge, uint256 _startDate, uint256 _endDate){
-            // cancel drip 
-            tribes.leaveTribe(_student);
-
-    }
-
-    function getInstructorDashboard() external returns (address _instructorDashboard) {
+    function getHasInstructorHasDashboard() view external returns (bool _hasDashboard) {
         address instructor_ = msg.sender; 
-        if(!hasInstructorDashboard[instructor_]) {
-            dashboardByInstructor[instructor_] = address(new InstructorDashboard(instructor_));    
-            hasInstructorDashboard[instructor_] = true; 
-        }   
+        return hasInstructorDashboard[instructor_];
+    }
+
+    function createInstructorDashboard(string memory _instructorSummary, string memory _schoolName, string memory _logo) external returns (address _instructorDashboard) {
+        
+        address instructor_ = msg.sender; 
+      //  tribes.addNewTribe(_schoolName);
+
+        summaryByInstructor[instructor_] = _instructorSummary; 
+        uint256 _schoolId = schoolCounter++; //tribes.totalTribes(self);
+        
+        School school = new School(_schoolName, instructor_, _schoolId, _logo/*, address(tribes) */);
+    
+        _instructorDashboard = address(new InstructorDashboard(instructor_, _instructorSummary, self, address(school))); 
+        dashboardByInstructor[instructor_] =  _instructorDashboard; 
+        hasInstructorDashboard[instructor_] = true;         
+        return _instructorDashboard; 
+    }
+
+    function getInstructorDashboard() view external returns (address _instructorDashboard) {
+        address instructor_ = msg.sender;         
         return dashboardByInstructor[instructor_];                    
     }
 
-    function getStudentDashboard() external returns (address _studentDashbaord) {
-        address student_ = msg.sender; 
-        if(!hasStudentDashboard[student_]) {
-            dashboardByStudent[student_] = address(new StudentDashboard(student_));    
-            hasStudentDashboard[student_] = true; 
-        }   
-        return dashboardByStudent[student_]; 
+
+    function getHasStudentDashboard(address _student) view external returns (bool _hasDashboard) {
+        return hasStudentDashboard[_student];
+    }
+
+
+    function createStudentDashboard(address _student) external returns (address _studentDashbaord){
+        StudentDashboard dashboard_ = new StudentDashboard(_student);
+        dashboardByStudent[_student] = address(dashboard_);
+        return address(dashboard_);
+    }
+
+ 
+    function getStudentDashboard(address _student) view  external returns (address _studentDashbaord) {
+        return dashboardByStudent[_student]; 
     }
 
     // ========================= INTERNAL ==
 
-    function mintBadgeInternal(address _student, uint256 _schoolId) internal returns (uint256 _nftSchoolBadge) {
-        
-        return 0; 
-    }
+
 
 }
