@@ -256,9 +256,9 @@
 
                 <div class="card-body">
                   <h5 class="card-title">Recorded Course Section<span>/Today</span></h5>
-
-                  <video id="my-player" controls style="width: 100%; max-width: 500px" />
-
+                  <center>
+                    <video id="my-player" controls style="width: 100%; max-width: 500px" />
+                  </center>
 
                   <!-- Line Chart -->
         
@@ -288,55 +288,88 @@
 
                 <div class="card-body">
                   <h5 class="card-title">Section Questions <span></span></h5>
+                      <!-- Bordered Tabs Justified -->
+                      <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                          <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true">Question 1</button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                          <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Question 2</button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                          <button class="nav-link w-100" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Question 3</button>
+                        </li>
+                      </ul>
+                      <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+                        <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
+                          Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.
+                          Select the most appropriate answer:
 
-                  <table class="table table-borderless datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#">#2457</a></th>
-                        <td>Brandon Jacob</td>
-                        <td><a href="#" class="text-primary">Part 5 Code your first website</a></td>
-                        <td>$64</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2147</a></th>
-                        <td>Bridie Kessler</td>
-                        <td><a href="#" class="text-primary">Part 3 The language</a></td>
-                        <td>$47</td>
-                        <td><span class="badge bg-warning">Pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2049</a></th>
-                        <td>Ashleigh Langosh</td>
-                        <td><a href="#" class="text-primary">Part 5 Code your first website</a></td>
-                        <td>$147</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Angus Grady</td>
-                        <td><a href="#" class="text-primar">Part 4 The first excercise</a></td>
-                        <td>$67</td>
-                        <td><span class="badge bg-danger">Rejected</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Raheem Lehner</td>
-                        <td><a href="#" class="text-primary">Part 3 The language</a></td>
-                        <td>$165</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          <fieldset class="row mb-3">
+                            <legend class="col-form-label col-sm-2 pt-0">Answers</legend>
+                            <div class="col-sm-10">
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                                <label class="form-check-label" for="gridRadios1">
+                                  First radio
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                                <label class="form-check-label" for="gridRadios2">
+                                  Second radio
+                                </label>
+                              </div>
+                              <div class="form-check disabled">
+                                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios" value="option" >
+                                <label class="form-check-label" for="gridRadios3">
+                                  Third disabled radio
+                                </label>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="profile-tab">
+                          Nesciunt totam et. Consequuntur magnam aliquid eos nulla dolor iure eos quia. Accusantium distinctio omnis et atque fugiat. Itaque doloremque aliquid sint quasi quia distinctio similique. Voluptate nihil recusandae mollitia dolores. Ut laboriosam voluptatum dicta.
+                          <div class="row mb-3">
+                            <legend class="col-form-label col-sm-2 pt-0">Checkboxes</legend>
+                            <div class="col-sm-10">
+          
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                <label class="form-check-label" for="gridCheck1">
+                                  Example checkbox
+                                </label>
+                              </div>
+          
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="gridCheck2" checked>
+                                <label class="form-check-label" for="gridCheck2">
+                                  Example checkbox 2
+                                </label>
+                              </div>
+          
+                            </div>
+                          </div>
+                        
+                        </div>
+                        <div class="tab-pane fade" id="bordered-justified-contact" role="tabpanel" aria-labelledby="contact-tab">
+                          Saepe animi et soluta ad odit soluta sunt. Nihil quos omnis animi debitis cumque. Accusantium quibusdam perspiciatis qui qui omnis magnam. Officiis accusamus impedit molestias nostrum veniam. Qui amet ipsum iure. Dignissimos fuga tempore dolor.
+                          <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Multi Select</label>
+                            <div class="col-sm-10">
+                              <select class="form-select" multiple aria-label="multiple select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div><!-- End Bordered Tabs Justified -->
+
+                      <a href="#" class="btn btn-success">Submit Answers</a>
 
                 </div>
 
