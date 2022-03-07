@@ -112,54 +112,61 @@
     </header>
     <!-- End Header -->
 
-   <!-- ======= Sidebar ======= -->
-   <aside id="sidebar" class="sidebar">
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
 
-    <ul class="sidebar-nav" id="sidebar-nav">
+        <ul class="sidebar-nav" id="sidebar-nav">
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="index.html">
-          <i class="bi bi-grid"></i>
-          <span>Home</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="student_dashboard.html">
-          <i class="bi bi-grid"></i>
-          <span>Your Student Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="student_dashboard.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Your Student Dashboard</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="student_recorded_learning.html">
-          <i class="bi bi-grid"></i>
-          <span>Recorded Learning</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="student_recorded_learning.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Recorded Learning</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="student_live_learning.html">
-          <i class="bi bi-grid"></i>
-          <span>Live Learning</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="student_live_learning.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Live Learning</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="instructor_dashboard.html">
-          <i class="bi bi-grid"></i>
-          <span>Your Instructor Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="instructor_dashboard.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Your Instructor Dashboard</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="instructor_live_teaching.html">
-          <i class="bi bi-grid"></i>
-          <span>Live Teaching</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="instructor_live_teaching.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Live Teaching</span>
+                </a>
+            </li>
+            <!-- End Dashboard Nav -->
 
-    </ul>
-  </aside><!-- End Sidebar-->
+        </ul>
+    </aside>
+    <!-- End Sidebar-->
 
     <main id="main" class="main">
 
@@ -419,7 +426,7 @@
                             <div class="row mb-3">
 
                                 <div class="col-sm-10">
-                                    <a href="#" class="btn btn-primary">Create Course</a>
+                                    <a href="#" id="create_course_button" class="btn btn-primary">Create Course</a>
                                 </div>
                             </div>
 
@@ -427,7 +434,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">Select Course to Edit</label>
                                 <div class="col-sm-10">
-                                    <select class="form-select" aria-label="Default select example">
+                                    <select id="select_course_to_edit" class="form-select" aria-label="Default select example">
                                   <option selected>Select Course to Edit</option>
                                   <option value="1">0x00000000000000000000000000000000000000 - Web3 for DAOs</option>
                                   <option value="2">0x00000000000000000000000000000000000000 - DeFi 2.0</option>
@@ -445,43 +452,43 @@
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Title</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputText">
+                                        <input type="text" id="course_title" class="form-control" id="inputText">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Summary</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="inputText">
+                                        <input type="text" id="course_summary" class="form-control" id="inputText">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail">
+                                        <input type="text" id="course_description" class="form-control" id="inputEmail">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Section Marks</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail">
+                                        <input type="text" id="course_section_marks" class="form-control" id="inputEmail">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-sm-2 col-form-label">Pass Mark</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail">
+                                        <input type="text" id="course_pass_mark" class="form-control" id="inputEmail">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <label for="inputNumber" class="col-sm-2 col-form-label">Course Logo</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="file" id="formFile">
+                                        <input class="form-control" id="course_logo" type="file" id="formFile">
                                     </div>
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-sm-10">
-                                        <a href="#" class="btn btn-primary">Save Course Details</a>
+                                        <a href="#" id="save_course_data" class="btn btn-primary">Save Course Details</a>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -496,7 +503,7 @@
                         </div>
                     </div>
 
-                 
+
 
                 </div>
 
@@ -590,11 +597,11 @@
 
                         </div>
                     </div>
-                
 
-                
 
-                   
+
+
+
 
                 </div>
             </div>
@@ -633,6 +640,53 @@
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
     <script>
+        const createCourseButton = document.getElementById("create_course_button");
+
+        const selectCourseToEditButton = document.getElementById("select_course_to_edit");
+
+        const courseTitle = document.getElementById("course_title");
+        const courseSummary = document.getElementById("course_summary");
+        const courseDescription = document.getElementById("course_description");
+        const courseSectionMarks = document.getElementById("course_section_marks");
+        const coursePassMark = document.getElementById("course_pass_mark");
+        const courseLogo = document.getElementById("course_logo");
+        const saveCourseDetailsButton = document.getElementById("save_course_data");
+
+        saveCourseDetailsButton.setAttribute('onClick', 'saveCourseData()');
+
+        const postCourseButton = document.getElementById("post_course_button");
+
+        const editButton = document.getElementById("edit_course_button");
+
+        var logoHash;
+
+        function saveCourseData() {
+            
+            var data = courseLogo.value; 
+            ipfs.add(data)
+                .then(function(response) {
+                    console.log(response);
+                    var logoIpfshash = response.hash;
+
+                    var title = courseTitle.value;
+                    var logo = logoIpfshash;
+                    var description = courseDescription.value;
+                    var fee = courseFee.value;
+                    var sectionMarks = courseSectionMarks.value;
+                    var passMark = coursePassMark.value;
+
+
+                    IABCourseContract.methods.populateCourse(title, logo, description, fee, passMark, sectionMarks)
+                        .then(function(response) {
+                            console.log(response);
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
+                    
+                });
+        }
+
         var onboardButton = document.getElementById("connect_web_3");
         var showWallet = document.getElementById("show_wallet");
         const web3 = new Web3('https://cloudflare-eth.com');
@@ -667,7 +721,7 @@
                 onboardButton.addEventListener('click', () => {
                     getAccount();
                     onboardButton.innerText = "Web 3 Connected";
-                    
+
                 });
             }
         };
@@ -708,6 +762,22 @@
                 console.error(error);
             }
         };
+
+
+        const ipfs = window.IpfsHttpClientLite('https://localhost:5001')
+        const buffer = window.IpfsHttpClientLite.Buffer;
+
+        async function saveToIPFS(data, messageSpan) {
+            console.log("posting data to ipfs data load :- " + data);
+            console.log(data);
+            /* upload the file */
+            await ipfs.add(data)
+                .then(function(response) {
+                    console.log(response);
+                    var hash
+                    messageSpan.innerHTML = response.hash;
+                });
+        }
     </script>
 
 </body>
